@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | {{ site.name }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+  {% if netlifyIdentity %}
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  {% endif %}
+</head>
+<body class="font-sans text-gray-800 bg-white">
+  <header class="bg-primary text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-5 py-4">
+      <div class="flex items-start gap-8 mb-4">
+        <a href="{{ '/' | url }}#home" class="-m-[35px] flex-shrink-0">
+          <img src="{{ '/assets/PBFAlogo-03.png' | url }}" alt="{{ site.name }}" class="h-[150px] w-auto">
+        </a>
+        <div class="flex flex-col items-start pt-4">
+          <h1 class="text-3xl font-bold text-white m-0">{{ site.name }}</h1>
+          <p class="italic text-white opacity-95 mt-1">{{ site.description }}</p>
+        </div>
+      </div>
+      <nav class="flex justify-end items-center">
+        <ul class="flex list-none gap-8">
+          {% if isOnePage %}
+          <li><a href="#about" class="text-white no-underline hover:opacity-80 transition-opacity">About</a></li>
+          <li><a href="#members" class="text-white no-underline hover:opacity-80 transition-opacity">Members</a></li>
+          <li><a href="#contact" class="text-white no-underline hover:opacity-80 transition-opacity">Contact</a></li>
+          {% else %}
+          {% for page in collections.pages | sort(false, false, 'data.order') %}
+          <li><a href="{{ page.url }}" class="text-white no-underline hover:opacity-80 transition-opacity">{{ page.data.title }}</a></li>
+          {% endfor %}
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {{ content | safe }}
+  </main>
+
+  <footer class="bg-primary text-white py-8 mt-16 text-center">
+    <div class="max-w-7xl mx-auto px-5">
+      <p>&copy; {{ site.name }} 2024</p>
+    </div>
+  </footer>
+
+  {% if netlifyIdentity %}
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+  {% endif %}
+</body>
+</html>
